@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-k8s-hands-on
+  labels:
+    app: initial
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: initial
+  template:
+    metadata:
+      labels:
+        app: initial
+    spec:
+      containers:
+      - name: initial
+        image: k8s-hands-on:v1
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-k8s-hands-on
+  labels:
+    app: initial
+spec:
+  type: NodePort
+  selector:
+    app: initial
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 9090
